@@ -57,6 +57,9 @@ void EditEmployee();
 void DeleteEmployee();
 
 void Selling();
+
+void Discounts(double totalSum, double totalPriceCheckArr[], int count, int checkSize);
+
 void AddNewCheckSize();
 void PrintCheck(double& totalSum);
 
@@ -336,6 +339,8 @@ void CreateDynamincStorage()
 		}
 	}
 }
+
+
 
 template<typename Arr>
 void FillStorege(Arr staticArr[], Arr dynamicArr[], int staticSize)
@@ -1347,7 +1352,9 @@ void Selling()
 			if (!isFirst)
 			{
 				//принт чека
-				PrintCheck(totalSum);
+				Discounts(totalSum, priceCheckArr,  count,  checkSize);
+
+				
 
 				while (true)
 				{
@@ -1421,6 +1428,36 @@ void Selling()
 			Sleep(1000);
 		}
 	}
+}
+
+void Discounts(double totalSum, double priceCheckArr[], int count, int checkSize)
+{
+	int nimPriceSneakers = 1000000;
+	int countFreeSneakers{};
+	std::cout << "\t\tАкции!!!!!!\n" << "1)Если ваш чек выходит на сумму больше 100000р то скидка 10%.\n"
+		<<"2)Если вы покупаете пять пар обуви то самая дешевая пара обуви идет в подарок.\n\n";
+	// от суммы 100000р скидка 10%
+	if (totalSum >= 100000)
+	{
+		totalSum = totalSum * 0.9;
+	}
+	// если человек покупает 5 пар обуви то самая дешевая пара из этих пяти в идет в подарок
+	if (count >= 5)
+	{
+		for (int i = 0; i < checkSize; i++)
+		{
+			if (priceCheckArr[i] <= nimPriceSneakers)
+			{
+				nimPriceSneakers = priceCheckArr[i];
+			}
+		}
+		countFreeSneakers = count / 5;
+		totalSum -= countFreeSneakers * nimPriceSneakers;
+	}
+
+	
+	PrintCheck(totalSum);
+
 }
 
 void AddNewCheckSize()
