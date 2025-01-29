@@ -58,7 +58,7 @@ void DeleteEmployee();
 
 void Selling();
 
-void Discounts(double totalSum, double totalPriceCheckArr[], int count, int checkSize);
+void Discounts(double totalSum, double totalPriceCheckArr[], int generalCount, int checkSize);
 
 void AddNewCheckSize();
 void PrintCheck(double& totalSum);
@@ -1267,6 +1267,7 @@ void Selling()
 		{
 			totalSum = 0;
 			isFirst = true;
+			int generalCount{};
 
 			delete[]totalPriceCheckArr;
 			delete[]nameCheckArr;
@@ -1308,6 +1309,7 @@ void Selling()
 									countCheckArr[checkSize - 1] = count;
 									priceCheckArr[checkSize - 1] = priceArr[id - 1];
 									totalPriceCheckArr[checkSize - 1] = count * priceArr[id - 1];
+									generalCount += count;
 									isFirst = false;
 									//удаление из склада
 									countArr[id - 1] -= count;
@@ -1320,6 +1322,7 @@ void Selling()
 									countCheckArr[checkSize - 1] = count;
 									priceCheckArr[checkSize - 1] = priceArr[id - 1];
 									totalPriceCheckArr[checkSize - 1] = count * priceArr[id - 1];
+									generalCount += count;
 									countArr[id - 1] -= count;
 									totalSum += count * priceArr[id - 1];
 								}
@@ -1352,7 +1355,7 @@ void Selling()
 			if (!isFirst)
 			{
 				//принт чека
-				Discounts(totalSum, priceCheckArr,  count,  checkSize);
+				Discounts(totalSum, priceCheckArr, generalCount,  checkSize);
 
 				
 
@@ -1430,9 +1433,9 @@ void Selling()
 	}
 }
 
-void Discounts(double totalSum, double priceCheckArr[], int count, int checkSize)
+void Discounts(double totalSum, double priceCheckArr[], int generalCount, int checkSize)
 {
-	int nimPriceSneakers = 1000000;
+	int minPriceSneakers = 1000000;
 	int countFreeSneakers{};
 	std::cout << "\t\tјкции!!!!!!\n" << "1)≈сли ваш чек выходит на сумму больше 100000р то скидка 10%.\n"
 		<<"2)≈сли вы покупаете п€ть пар обуви то сама€ дешева€ пара обуви идет в подарок.\n\n";
@@ -1442,17 +1445,17 @@ void Discounts(double totalSum, double priceCheckArr[], int count, int checkSize
 		totalSum = totalSum * 0.9;
 	}
 	// если человек покупает 5 пар обуви то сама€ дешева€ пара из этих п€ти в идет в подарок
-	if (count >= 5)
+	if (generalCount >= 5)
 	{
 		for (int i = 0; i < checkSize; i++)
 		{
-			if (priceCheckArr[i] <= nimPriceSneakers)
+			if (priceCheckArr[i] <= minPriceSneakers)
 			{
-				nimPriceSneakers = priceCheckArr[i];
+				minPriceSneakers = priceCheckArr[i];
 			}
 		}
-		countFreeSneakers = count / 5;
-		totalSum -= countFreeSneakers * nimPriceSneakers;
+		countFreeSneakers = generalCount / 5;
+		totalSum -= countFreeSneakers * minPriceSneakers;
 	}
 
 	
